@@ -25,13 +25,17 @@ def reader(pipe, pipe_name, queue):
 # area_data:            A string containing appropriately formated area data
 # gen_file:             A string containing the path to the appropriate .gen file
 # cartogram_executable: A string containg the path to the C code executable
-def generate_cartogram(area_data, gen_file, cartogram_executable):
+def generate_cartogram(area_data, gen_file, cartogram_executable, world=False):
 
+    flag = '-s'
+    if world == True:
+        flag = '-sw'
+        
     cartogram_process = subprocess.Popen([
         cartogram_executable,
         '-g',
         gen_file,
-        '-s'
+        flag
     ],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=1)
 
     q = Queue()
