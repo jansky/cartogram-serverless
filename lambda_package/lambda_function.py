@@ -17,15 +17,19 @@ def lambda_handler(event, context):
     params = json.loads(event['body'])
 
     # The C code deduces from the map data file extension whether we have GeoJSON or .gen
+    world = False
     try:
         conventional_json = json.loads(params["gen_file"])
+        if "extent" in conventional_json.keys():
+            if conventional_json['extent'] == "world":
+                world = True
     except json.JSONDecodeError:
         map_data_filename = "conventional.gen"
 
     with open("/tmp/{}".format(map_data_filename), "w") as conventional_map_file:
         conventional_map_file.write(params["gen_file"])
 
-    for source, line in cartwrap.generate_cartogram(params["area_data"], "/tmp/{}".format(map_data_filename), "{}/cartogram".format(os.environ['LAMBDA_TASK_ROOT'])):
+    for source, line in cartwrap.generate_cartogram(params["area_data"], "/tmp/{}".format(map_data_filename), "{}/cartogram".format(os.environ['LAMBDA_TASK_ROOT']), world):
 
         if source == "stdout":
             stdout += line.decode()
