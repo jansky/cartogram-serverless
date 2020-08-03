@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Package
-        run: |
-          ./package.sh
       - uses:  chrislennon/action-aws-cli@v1.1
       - name: Deploy to AWS Lambda
         run: |
