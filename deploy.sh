@@ -7,7 +7,7 @@ if ! file lambda_package/cartogram | grep -q "GNU/Linux"; then
 fi
 
 ./package.sh
-aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --zip-file fileb://cartogram.zip
+aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --zip-file fileb://cartogram.zip || exit 1
 rm cartogram.zip
 
 set +x
