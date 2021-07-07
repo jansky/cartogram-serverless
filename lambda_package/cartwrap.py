@@ -35,6 +35,8 @@ def generate_cartogram(area_data, gen_file, cartogram_executable, world=False):
         cartogram_executable,
         '-g',
         gen_file,
+        '-v',
+        area_data,
         flag
     ],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=1)
 
@@ -43,8 +45,8 @@ def generate_cartogram(area_data, gen_file, cartogram_executable, world=False):
     Thread(target=reader,args=[cartogram_process.stdout, "stdout", q]).start()
     Thread(target=reader,args=[cartogram_process.stderr, "stderr", q]).start()
 
-    cartogram_process.stdin.write(str.encode(area_data))
-    cartogram_process.stdin.close()
+    # cartogram_process.stdin.write(str.encode(area_data))
+    # cartogram_process.stdin.close()
 
     for _ in range(2):
         for source, line in iter(q.get, None):

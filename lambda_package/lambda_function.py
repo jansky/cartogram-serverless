@@ -28,8 +28,10 @@ def lambda_handler(event, context):
 
     with open("/tmp/{}".format(map_data_filename), "w") as conventional_map_file:
         conventional_map_file.write(params["gen_file"])
+    with open("/tmp/areas.csv", "w") as areas_file:
+        areas_file.write(params["area_data"])
 
-    for source, line in cartwrap.generate_cartogram(params["area_data"], "/tmp/{}".format(map_data_filename), "{}/cartogram".format(os.environ['LAMBDA_TASK_ROOT']), world):
+    for source, line in cartwrap.generate_cartogram("/tmp/areas.csv", "/tmp/{}".format(map_data_filename), "{}/cartogram".format(os.environ['LAMBDA_TASK_ROOT']), world):
 
         if source == "stdout":
             stdout += line.decode()
