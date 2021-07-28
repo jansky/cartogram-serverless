@@ -40,7 +40,7 @@ def lambda_handler(event, context):
             stderr_line = line.decode()
             stderr += line.decode()
 
-            s = re.search(r'max\. area err: (.+)', line.decode())
+            s = re.search(r'Progress: (.+)', line.decode())
 
             if s != None:
                 current_progress = float(s.groups(1)[0])
