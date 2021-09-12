@@ -2,6 +2,7 @@ import cartwrap
 import json
 import os
 import re
+from math import ceil, log
 from requests_futures.sessions import FuturesSession
 
 def lambda_handler(event, context):
@@ -59,6 +60,12 @@ def lambda_handler(event, context):
             if s != None:
                 current_progress = float(s.groups(1)[0])
 
+                if cartogram_exec == "cartogram_c":
+                    current_progress = 1/ ceil(log((current_progress/0.01), 5))
+                
+                if current_progress == 1.0:
+                    current_progress = 0.9
+                    
                 session.post(os.environ['CARTOGRAM_PROGRESS_URL'], json={
                     'secret': os.environ['CARTOGRAM_PROGRESS_SECRET'],
                     'key': params['key'],
