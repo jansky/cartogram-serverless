@@ -13,6 +13,7 @@ def lambda_handler(event, context):
     stderr = ""
     order = 0
 
+    # We run C++ executable for most maps and old C excutable (named "cartogram_c") only for Ethiopia and World Map
     cartogram_exec = "cartogram"
 
     map_data_filename = "conventional.json"
@@ -52,6 +53,9 @@ def lambda_handler(event, context):
             stderr_line = line.decode()
             stderr += line.decode()
 
+            # From C++ executable, we directly get cartogram generation progress in percentage; whereas, for C executable
+            # we get maximum absolute area error which we translate into progress percentage.
+            
             s = re.search(r'Progress: (.+)', line.decode())
 
             if cartogram_exec == "cartogram_c":
@@ -61,10 +65,11 @@ def lambda_handler(event, context):
                 current_progress = float(s.groups(1)[0])
 
                 if cartogram_exec == "cartogram_c":
-                    current_progress = 1/ ceil(log((current_progress/0.01), 5))
+                    current_progress = 1 / max(1 , log((current_progress/0.01), 5))
                 
+                # Prevents the progress bar from getting stuck at 100%
                 if current_progress == 1.0:
-                    current_progress = 0.9
+                    current_progress = 0.95
                     
                 session.post(os.environ['CARTOGRAM_PROGRESS_URL'], json={
                     'secret': os.environ['CARTOGRAM_PROGRESS_SECRET'],
