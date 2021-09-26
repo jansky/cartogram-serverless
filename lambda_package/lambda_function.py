@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     stderr = ""
     order = 0
 
-    # We run C++ executable for most maps and old C excutable (named "cartogram_c") only for Ethiopia and World Map
+    # We run C++ executable for most maps and old C excutable (named "cartogram_c") only for the World Map
     cartogram_exec = "cartogram"
 
     map_data_filename = "conventional.json"
@@ -24,9 +24,6 @@ def lambda_handler(event, context):
     world = False
     try:
         conventional_json = json.loads(params["gen_file"])
-        if "NAME_0" in conventional_json['features'][0]["properties"].keys():
-            if conventional_json['features'][0]["properties"]["NAME_0"] == "Ethiopia":
-                cartogram_exec = "cartogram_c"
         if "extent" in conventional_json.keys():
             if conventional_json['extent'] == "world":
                 world = True
