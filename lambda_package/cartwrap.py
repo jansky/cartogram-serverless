@@ -26,19 +26,18 @@ def reader(pipe, pipe_name, queue):
 # gen_file:             A string containing the path to the appropriate .gen file
 # cartogram_executable: A string containg the path to the C code executable
 def generate_cartogram(area_data, gen_file, cartogram_executable, world=False):
-
-    flag = '-s'
+    
+    # o flag for output to stdout
+    flag = '-o'
     if world == True:
-        flag = '-sw'
+        flag = '-ow'
 
     cart_exec_name = cartogram_executable.rsplit('/', 1)[-1]
 
     if cart_exec_name == "cartogram":
         cartogram_process = subprocess.Popen([
             cartogram_executable,
-            '-g',
             gen_file,
-            '-v',
             area_data,
             flag
         ],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,bufsize=1)
