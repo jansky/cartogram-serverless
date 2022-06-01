@@ -3,12 +3,16 @@
 set -x
 rm -f cartogram.zip
 
-OLDWD=$(pwd)
+rm -rf ./package
+pip install --target ./package -r requirements.txt || exit 1
 
-cd lambda_package/venv/lib/python3.6/site-packages
-zip -r9 $OLDWD/cartogram.zip .
+cd package
+zip -r9 ../cartogram.zip . || exit 1
 
-cd $OLDWD/lambda_package
-zip -g $OLDWD/cartogram.zip cartogram *.py
+cd ../lambda_package
+zip -g ../cartogram.zip cartogram *.py || exit 1
+
+cd ../
+rm -rf ./package
 
 set +x
