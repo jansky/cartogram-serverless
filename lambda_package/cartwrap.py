@@ -27,12 +27,16 @@ def reader(pipe, pipe_name, queue):
 # cartogram_executable: A string containg the path to the C code executable
 def generate_cartogram(area_data, gen_file, cartogram_executable, world=False):
     
-    # o flag for output to stdout
-    flag = '-o'
-    if world == True:
-        flag = '-ow'
-
     cart_exec_name = cartogram_executable.rsplit('/', 1)[-1]
+    
+    # o flag for output to stdout
+    if cart_exec_name == "cartogram":
+        flag = '-o'
+    else:
+        flag = '-s'
+        
+    if world == True:
+        flag += 'w'
 
     if cart_exec_name == "cartogram":
         cartogram_process = subprocess.Popen([
