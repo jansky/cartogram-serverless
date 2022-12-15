@@ -6,6 +6,11 @@ if ! file lambda_package/cartogram | grep -q "GNU/Linux"; then
     exit 1
 fi
 
+if ! file lambda_package/cartogram_c | grep -q "GNU/Linux"; then
+    echo "ERROR: lambda_package/cartogram_c is not a Linux executable."
+    exit 1
+fi
+
 ./package.sh || exit 1
 
 aws lambda update-function-configuration \
